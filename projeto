@@ -1,0 +1,61 @@
+from datetime import datetime
+
+
+class Reserva:
+    def __init__(self, nome, data_checkin, data_checkout):
+        self.nome = nome
+        self.data_checkin = data_checkin
+        self.data_checkout = data_checkout
+        self.valor_total = 0
+        self.reserva = ' '
+
+    def exibir_detalhes_reserva(self):
+        print(f'Cliente: {self.nome} \nTipo de quarto: {self.reserva} \nPeríodo: {self.data_checkin}  '
+              f'a  {self.data_checkout} \nValor total: R${self.valor_total:.2f}')
+
+
+class ReservaPadrao(Reserva):
+    def __init__(self, nome, data_checkin, data_checkout, preco_noite):
+        super().__init__(nome, data_checkin, data_checkout)
+        self.reserva = 'Padrão'
+        self.preco_noite = preco_noite
+
+    def calcular_total_reserva(self, quantidade_noites):
+        self.valor_total = self.preco_noite * quantidade_noites
+
+
+class ReservaSuite(Reserva):
+    def __init__(self, nome, data_checkin, data_checkout, preco_noite, taxa_servico):
+        super().__init__(nome, data_checkin, data_checkout)
+        self.reserva = 'Suíte'
+        self.preco_noite = preco_noite
+        self.taxa_servico = taxa_servico
+
+    def calcular_total_reserva(self, quantidade_noites):
+        self.valor_total = self.preco_noite * quantidade_noites + taxa_servico
+
+
+
+nome = input('Digite o nome do cliente:')
+data_checkin = input('Digite a data de check-in (DD/MM/AAAA):')
+data_checkout = input('Digite a data de check-out (DD/MM/AAAA):')
+
+checkin_date = datetime.strptime(data_checkin, '%d/%m/%Y')
+checkout_date = datetime.strptime(data_checkout, '%d/%m/%Y')
+noite = (checkout_date - checkin_date).days
+
+tipo_reserva = int(input('Tipo de reserva (1 para Quarto Padrão, 2 para Suíte):'))
+preco_noite = float(input('Digite o preço por noite: R$'))
+taxa_servico = float(input('Digite a taxa de serviço: R$'))
+
+print()
+if tipo_reserva == 1:
+    padrao = ReservaPadrao(nome, data_checkin, data_checkout, preco_noite)
+    padrao.calcular_total_reserva(quantidade_noites=noite)
+    padrao.exibir_detalhes_reserva()
+
+elif tipo_reserva == 2:
+    suite = ReservaSuite(nome, data_checkin, data_checkout, preco_noite, taxa_servico)
+    suite.calcular_total_reserva(quantidade_noites=noite)
+    suite.exibir_detalhes_reserva()
+
